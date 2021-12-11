@@ -62,7 +62,7 @@ foreach my $snrt  (@sensetypes) {
 	Xref2Var($snrt);
 	}
 
-die "skip writing" ;
+# die "skip writing" ;
 my $xmlstring = $fwdatatree->toString;
 # Some miscellaneous Tidying differences
 $xmlstring =~ s#><#>\n<#g;
