@@ -1,10 +1,13 @@
 #!/usr/bin/env perl
 my $USAGE = "Usage: $0 [--inifile Xref2var.ini] [--section Xref2Var] [--recmark lx] [--eolrep #] [--reptag __hash__] [--debug] [file.sfm]";
 =pod
-This script is a stub that provides the code for opl'ing and de_opl'ing an input file
-It also includes code to:
-	- use an ini file (commented out)
-	- process command line options including debugging
+FLEx (as of version 9.1) has a bug in the import process when a subentry is imported:
+ * the first reference to a main entry is converted to a link back to that main entry
+ *  If the main entry has a matching subentry, the link is taken to be a complex form
+ * otherwise it is a variant.
+ * 2nd and subsequent references are ignored.
+
+This script changes the 2nd-nth references to cross references with special \lf tags. Once those have been created and imported into a FLEx database, a companion script will modify those to be variant entries. Those variant entries can be converted to complex forms by the Var2Compform.pl script of the SubEntry Promotion repo.
 
 The ini file should have sections with syntax like this:
 [Xref2Var]
@@ -14,8 +17,6 @@ FwdataOut=FwProject.fwdata
 EntryXRefAbbrev=SEpR-E
 SenseXRefPrefix=SEpR-S-
 # matching senses will be SEpR-S-1, SEpR-S-2, etc
-
-
 =cut
 use 5.020;
 use utf8;
@@ -25,7 +26,6 @@ use strict;
 use warnings;
 use English;
 use Data::Dumper qw(Dumper);
-
 
 use File::Basename;
 my $scriptname = fileparse($0, qr/\.[^.]*/); # script name without the .pl
@@ -46,9 +46,6 @@ GetOptions (
 
 # check your options and assign their information to variables here
 $recmark =~ s/[\\ ]//g; # no backslashes or spaces in record marker
-
-# if you need  a config file uncomment the following and modify it for the initialization you need.
-# if you have set the $inifilename & $inisection in the options, you only need to set the parameter variables according to the parameter names
 
 use Config::Tiny;
 my $config = Config::Tiny->read($inifilename, 'crlf');
@@ -77,8 +74,6 @@ while (<>) {
 push @opledfile_in, $line;
 
 for my $oplline (@opledfile_in) {
-# Insert code here to perform on each opl'ed line.
-# Note that a next command will prevent the line from printing
 my $mncount = 0;
 $oplline =~ s/(\\mn [^#]*)/$mncount++; mnxrefreplace($mncount,$1)/ge;
 
