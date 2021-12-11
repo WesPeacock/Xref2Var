@@ -31,6 +31,6 @@ zip "$backupfile" "$fwdatafile"  # 2>/dev/null
 echo
 rm $fwdatafile $barefname-before.fwdata
 echo "Work files \"$fwdatafile\" & \"$barefname-before.fwdata\" have been deleted"
-mv PromoteSubentries.bak PromoteSubentries.ini
+mv Xref2Var.bak  Xref2Var.ini
 echo
 echo "The file \"$fwdatafile\" inside \"$backupfile\" has been corrected."
