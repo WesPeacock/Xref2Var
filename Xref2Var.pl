@@ -102,10 +102,33 @@ foreach my $memb (@members) {
 			say STDERR "FECL as node:", ref($FirstEntryComponentLexemes);
 			}
 		else {
+			my $senseguid = 0;
+			say  STDERR "Looking for Sense $Abbrev in ", $targ;
+			if ($Abbrev =~ /\Q$SenseXRefPrefix\E/) {
+				# for sense references, find the proper sense #
+				my $mainentry = $rthash{$targ->getAttribute('guid')};
+				my @senserefs = $mainentry->findnodes('./Senses/objsur');
+				my $sensemax = @senserefs;
+				say  STDERR "found $sensemax senses.";
+				my $senseno = $Abbrev;
+				$senseno =~ s/\Q$SenseXRefPrefix\E//;
+				say  STDERR "Looking for Sense # $senseno";
+				if ($senseno > $sensemax)  {
+					say  STDERR "Sense # $senseno doesn't exist (too large).";
+					say  STDERR displaylexentstring ($rthash{$targ->getAttribute('guid')});
+					say STDERR "will use Entry instead of sense";
+					}
+				else {
+					$senseno = $senseno - 1; # offset 0
+					say STDERR "sense reference", $senserefs[$senseno];
+					$senseguid = $senserefs[$senseno]->getAttribute('guid');
+					}
+				}
+			else {say STDERR "$Abbrev didn't match Subentry marker"}
 			my $targstring = $targ->toString;
-			say STDERR "type string:", ref ($targstring);
 			say STDERR "subsequent target-rt:", rtheader($targrt) ;
 			my ($newnode) = XML::LibXML->load_xml(string => $targstring)->findnodes('//*');
+			$newnode->setAttribute('guid', $senseguid) if $senseguid;
 			say STDERR "subsequent target as node:",  $newnode;
 			say STDERR "newnode ref:", ref($newnode);
 			$FirstEntryComponentLexemes->addChild($newnode);
