@@ -59,19 +59,3 @@ Manual cleanup of the FLEx database afterwards:
 
 * merge the dummy prefix/suffixes with the pre-existing real ones
 * delete the special cross-refs
-
-Bug: The code that looks for the special cross-refs:
-
-````perl
-my ($ecrrt) = $fwdatatree->findnodes(q#//*[contains(., '# .  $EntryXRefAbbrev . q#')]/ancestor::rt#);
-````
-
-should only look at <rt class="LexRefType"
-
-````XML
-<rt class="LexRefType" guid="19cf87c0-8238-4e3e-94a4-68e99c96bd9d" ownerguid="b758e2a2-ea5e-11de-9d24-0013722f8dec">
-<Abbreviation>
-<AUni ws="en">SEpR-E</AUni>
-</Abbreviation>
-````
-

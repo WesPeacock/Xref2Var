@@ -54,10 +54,10 @@ foreach my $rt ($fwdatatree->findnodes(q#//rt#)) {
 	}
 # die "loaded & hashed  $infilename";
 
-my ($ecrrt) = $fwdatatree->findnodes(q#//*[contains(., '# .  $EntryXRefAbbrev . q#')]/ancestor::rt#);
+my ($ecrrt)= $fwdatatree->findnodes(q#//rt[@class='LexRefType']/Abbreviation/AUni[contains(., '# .  $EntryXRefAbbrev . q#')]/ancestor::rt#);
 Xref2Var($ecrrt);
 # die "after Entries";
-my @sensetypes = $fwdatatree->findnodes(q#//*[contains(., '# . $SenseXRefPrefix . q#')]/ancestor::rt#);
+my @sensetypes = $fwdatatree->findnodes(q#//rt[@class='LexRefType']/Abbreviation/AUni[contains(., '# .  $SenseXRefPrefix . q#')]/ancestor::rt#);
 foreach my $snrt  (@sensetypes) {
 	Xref2Var($snrt);
 	}
