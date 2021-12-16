@@ -96,10 +96,10 @@ die "too many component references (max 9):$mnfield" if $mnc > 9;
 
 if ($mnc > 1) {
 	if ($mnfield =~ m/ [0-9]+$/) {
-		$mnfield =~ s/(\\$MainRefMarker )(.*?) ([0-9]+)/\\lf $SenseXRefPrefix$3\n\\lv $2/;
+		$mnfield =~ s/(\\$MainRefMarker )(.*?) ([0-9]+)/\\lf $SenseXRefPrefix$3-$mnc\n\\lv $2/;
 		}
 	else {
-		$mnfield =~ s/\\$MainRefMarker /\\lf $EntryXRefAbbrev\n\\lv /;
+		$mnfield =~ s/\\$MainRefMarker /\\lf $EntryXRefAbbrev-$mnc\n\\lv /;
 		}
 }
 return $mnfield;
