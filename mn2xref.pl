@@ -93,8 +93,8 @@ sub mnxrefreplace {
 my ($mnc, $mnfield) = @_;
 
 if ($mnc > 1) {
-	if ($mnfield =~ m/[0-9]$/) {
-		$mnfield =~ s/(\\$MainRefMarker )(.*?)([0-9]+)/\\lf $SenseXRefPrefix$3\n\\lv $2/;
+	if ($mnfield =~ m/ [0-9]+$/) {
+		$mnfield =~ s/(\\$MainRefMarker )(.*?) ([0-9]+)/\\lf $SenseXRefPrefix$3\n\\lv $2/;
 		}
 	else {
 		$mnfield =~ s/\\$MainRefMarker /\\lf $EntryXRefAbbrev\n\\lv /;
