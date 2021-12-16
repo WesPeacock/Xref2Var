@@ -17,6 +17,7 @@ FwdataOut=FwProject.fwdata
 EntryXRefAbbrev=SEpR-E
 SenseXRefPrefix=SEpR-S-
 # matching senses will be SEpR-S-1, SEpR-S-2, etc
+MainRefMarker=mn
 =cut
 use 5.020;
 use utf8;
@@ -55,6 +56,8 @@ my $EntryXRefAbbrev = $config->{"$inisection"}->{EntryXRefAbbrev};
 say STDERR "EntryXRefAbbrev : $EntryXRefAbbrev" if $debug;
 my $SenseXRefPrefix= $config->{"$inisection"}->{SenseXRefPrefix};
 say STDERR "SenseXRefPrefix:$SenseXRefPrefix" if $debug;
+my $MainRefMarker= $config->{"$inisection"}->{MainRefMarker};
+say STDERR "MainRefMarker:$MainRefMarker" if $debug;
 
 # generate array of the input file with one SFM record per line (opl)
 my @opledfile_in;
@@ -75,7 +78,7 @@ push @opledfile_in, $line;
 
 for my $oplline (@opledfile_in) {
 my $mncount = 0;
-$oplline =~ s/(\\mn [^#]*)/$mncount++; mnxrefreplace($mncount,$1)/ge;
+$oplline =~ s/(\\$MainRefMarker [^#]*)/$mncount++; mnxrefreplace($mncount,$1)/ge;
 
 say STDERR "oplline:", Dumper($oplline) if $debug;
 #de_opl this line
@@ -91,10 +94,10 @@ my ($mnc, $mnfield) = @_;
 
 if ($mnc > 1) {
 	if ($mnfield =~ m/[0-9]$/) {
-		$mnfield =~ s/(\\mn )(.*?)([0-9]+)/\\lf $SenseXRefPrefix$3\n\\lv $2/;
+		$mnfield =~ s/(\\$MainRefMarker )(.*?)([0-9]+)/\\lf $SenseXRefPrefix$3\n\\lv $2/;
 		}
 	else {
-		$mnfield =~ s/\\mn /\\lf $EntryXRefAbbrev\n\\lv /;
+		$mnfield =~ s/\\$MainRefMarker /\\lf $EntryXRefAbbrev\n\\lv /;
 		}
 }
 return $mnfield;
