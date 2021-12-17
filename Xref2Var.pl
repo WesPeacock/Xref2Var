@@ -17,6 +17,7 @@ use XML::LibXML;
 
 use Config::Tiny;
 my $configfile = 'Xref2Var.ini';
+=pod
  # ; Xref2Var.ini file looks like:
  # [Xref2Var]
 #
@@ -24,8 +25,12 @@ my $configfile = 'Xref2Var.ini';
  # FwdataOut=FwProject.fwdata
 EntryXRefAbbrev=EntryComponent
 # tag will be EntryComponent-<component#>
+# EntryComponent-2, EntryComponent-3, .etc
 SenseXRefPrefix=SenseComponent-
 # tag will be SenseComponent-<sense#>-<component#>
+# e.g. SenseComponent-3-4 would be sense 3 occuring as the 4th component
+MainRefMarker=mn
+=cut
 
 my $inisection = 'Xref2Var';
 my $config = Config::Tiny->read($configfile, 'crlf');
