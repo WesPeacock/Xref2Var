@@ -22,8 +22,10 @@ my $configfile = 'Xref2Var.ini';
 #
  # FwdataIn=FwProject-before.fwdata
  # FwdataOut=FwProject.fwdata
- # EntryXRefAbbrev=SEpR-E
- # SenseXRefPrefix=SEpR-S-
+EntryXRefAbbrev=EntryComponent
+# tag will be EntryComponent-<component#>
+SenseXRefPrefix=SenseComponent-
+# tag will be SenseComponent-<sense#>-<component#>
 
 my $inisection = 'Xref2Var';
 my $config = Config::Tiny->read($configfile, 'crlf');

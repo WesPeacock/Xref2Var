@@ -14,9 +14,9 @@ The ini file should have sections with syntax like this:
 #
 FwdataIn=FwProject-before.fwdata
 FwdataOut=FwProject.fwdata
-EntryXRefAbbrev=SEpR-E
-SenseXRefPrefix=SEpR-S-
-# matching senses will be SEpR-S-1, SEpR-S-2, etc
+EntryXRefAbbrev=EntryComponent
+# tag will be EntryComponent-<component#>
+SenseXRefPrefix=SenseComponent-
 MainRefMarker=mn
 =cut
 use 5.020;
