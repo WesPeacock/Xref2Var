@@ -61,14 +61,23 @@ foreach my $rt ($fwdatatree->findnodes(q#//rt#)) {
 	}
 # die "loaded & hashed  $infilename";
 
-my ($ecrrt)= $fwdatatree->findnodes(q#//rt[@class='LexRefType']/Abbreviation/AUni[contains(., '# .  $EntryXRefAbbrev . q#')]/ancestor::rt#);
-Xref2Var($ecrrt);
-# die "after Entries";
-my @sensetypes = $fwdatatree->findnodes(q#//rt[@class='LexRefType']/Abbreviation/AUni[contains(., '# .  $SenseXRefPrefix . q#')]/ancestor::rt#);
-foreach my $snrt  (@sensetypes) {
-	Xref2Var($snrt);
-	}
+my @LexRefType_list; #each element: <component#>_<guid of LexRefType>
 
+foreach my $abbrev ($EntryXRefAbbrev, $SenseXRefPrefix) {
+	my @LexRefTypes = $fwdatatree->findnodes(q#//rt[@class='LexRefType']/Abbreviation/AUni[contains(., '# .  $abbrev . q#')]/ancestor::rt#);
+	foreach my $LexRefType (@LexRefTypes) {
+		my ($tempabbrev) =$LexRefType->findnodes('./Abbreviation/AUni/text()');
+		say STDERR "tempabbrev:$tempabbrev";
+		my $newelem = (substr $tempabbrev, -1) . "_" . $LexRefType->getAttribute('guid');
+		say STDERR "new element added to LexRefType_list:$newelem";
+		push (@LexRefType_list, $newelem);
+		}
+	}
+say STDERR "LexRefType_list:", @LexRefType_list;
+foreach my $elem (sort @LexRefType_list) {
+	my ($toss, $guid) = split (/_/, $elem);
+	Xref2Var($rthash{$guid})
+}
 # die "skip writing" ;
 my $xmlstring = $fwdatatree->toString;
 # Some miscellaneous Tidying differences
@@ -84,7 +93,10 @@ print {$out_fh} $xmlstring;
 
 sub Xref2Var{
 my ($xrefrt) =@_;
+say  STDERR "Entering  Xref2Var ", rtheader($xrefrt);
 my $Abbrev = ($xrefrt->findnodes('./Abbreviation/AUni/text()'));
+say  STDERR "Abbrev with component#:$Abbrev";
+$Abbrev =~ s/..$//; # remove the component #
 say  STDERR "Abbrev:$Abbrev";
 my @members = $xrefrt->findnodes('./Members/objsur') ;
 foreach my $memb (@members) {
@@ -101,7 +113,7 @@ foreach my $memb (@members) {
 		my $targrt = $rthash{$targ->getAttribute('guid')};
 		if ($firsttarget) {
 			$firsttarget = 0;
-			say STDERR "first target", rtheader($targrt) ;
+			say STDERR "first target:", rtheader($targrt) ;
 			my ($FirstEntryRef) = $targrt->findnodes('./EntryRefs/objsur') ;
 			say STDERR "FirstEntryRef", rtheader($FirstEntryRef);
 			($FirstEntryComponentLexemes) = $rthash{$FirstEntryRef->getAttribute('guid')}->findnodes('./ComponentLexemes');
@@ -143,6 +155,7 @@ foreach my $memb (@members) {
 			}
 		}
 	}
+say  STDERR "Exiting  Xref2Var ", rtheader($xrefrt);
 }
 
 sub rtheader { # dump the <rt> part of the record
