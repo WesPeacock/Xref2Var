@@ -80,11 +80,19 @@ while (<>) {
 push @opledfile_in, $line;
 
 for my $oplline (@opledfile_in) {
-my $mncount = 0;
-$oplline =~ s/(\\$MainRefMarker [^#]*)/$mncount++; mnxrefreplace($mncount,$1)/ge;
+	my $mncount = 0;
+	if ($oplline =~ m/\\(ps|sn|ge|de) .+?\\$MainRefMarker /) {
+		say STDERR "Component reference within a sense";
+		say STDERR $oplline;
+		}
+	if (($oplline =~ m/\\$MainRefMarker /) && !($oplline =~ m/\\spec /)) {
+		say STDERR "Component reference without a ComplexFormType marker";
+		say STDERR $oplline;
+		}
+	$oplline =~ s/(\\$MainRefMarker [^#]*)/$mncount++; mnxrefreplace($mncount,$1)/ge;
 
-say STDERR "oplline:", Dumper($oplline) if $debug;
-#de_opl this line
+	say STDERR "oplline:", Dumper($oplline) if $debug;
+	#de_opl this line
 	for ($oplline) {
 		s/$eolrep/\n/g;
 		s/$reptag/$eolrep/g;
