@@ -143,7 +143,7 @@ foreach my $memb (@members) {
 					$senseguid = $senserefs[$senseno]->getAttribute('guid');
 					}
 				}
-			else {say STDERR "$Abbrev didn't match Subentry marker"}
+			else {say STDERR "\"$Abbrev\" didn't match Subentry marker"}
 			my $targstring = $targ->toString;
 			say STDERR "subsequent target-rt:", rtheader($targrt) ;
 			my ($newnode) = XML::LibXML->load_xml(string => $targstring)->findnodes('//*');
