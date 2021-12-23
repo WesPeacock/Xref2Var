@@ -67,13 +67,13 @@ foreach my $abbrev ($EntryXRefAbbrev, $SenseXRefPrefix) {
 	my @LexRefTypes = $fwdatatree->findnodes(q#//rt[@class='LexRefType']/Abbreviation/AUni[contains(., '# .  $abbrev . q#')]/ancestor::rt#);
 	foreach my $LexRefType (@LexRefTypes) {
 		my ($tempabbrev) =$LexRefType->findnodes('./Abbreviation/AUni/text()');
-		say STDERR "tempabbrev:$tempabbrev";
+		say STDERR "tempabbrev:$tempabbrev" if $debug;
 		my $newelem = (substr $tempabbrev, -1) . "_" . $LexRefType->getAttribute('guid');
-		say STDERR "new element added to LexRefType_list:$newelem";
+		say STDERR "new element added to LexRefType_list:$newelem" if $debug;
 		push (@LexRefType_list, $newelem);
 		}
 	}
-say STDERR "LexRefType_list:", @LexRefType_list;
+say STDERR "LexRefType_list:", @LexRefType_list if $debug;
 foreach my $elem (sort @LexRefType_list) {
 	my ($toss, $guid) = split (/_/, $elem);
 	Xref2Var($rthash{$guid})
@@ -93,15 +93,15 @@ print {$out_fh} $xmlstring;
 
 sub Xref2Var{
 my ($xrefrt) =@_;
-say  STDERR "Entering  Xref2Var ", rtheader($xrefrt);
+say  STDERR "Entering  Xref2Var ", rtheader($xrefrt) if $debug;
 my $Abbrev = ($xrefrt->findnodes('./Abbreviation/AUni/text()'));
-say  STDERR "Abbrev with component#:$Abbrev";
+say  STDERR "Abbrev with component#:$Abbrev" if $debug;
 $Abbrev =~ s/..$//; # remove the component #
-say  STDERR "Abbrev:$Abbrev";
+say  STDERR "Abbrev:$Abbrev" if $debug;
 my @members = $xrefrt->findnodes('./Members/objsur') ;
 foreach my $memb (@members) {
 	my $membrt = $rthash{$memb->getAttribute('guid')};
-	say STDERR "Member:", $membrt;
+	say STDERR "Member:", $membrt if $debug;
 	# Xref targets
 	# 1st is the ComplexForm
 	# 2nd - nth are Components to be added to the ComponentLexeme list
@@ -113,25 +113,25 @@ foreach my $memb (@members) {
 		my $targrt = $rthash{$targ->getAttribute('guid')};
 		if ($firsttarget) {
 			$firsttarget = 0;
-			say STDERR "first target:", rtheader($targrt) ;
+			say STDERR "first target:", rtheader($targrt)  if $debug;
 			my ($FirstEntryRef) = $targrt->findnodes('./EntryRefs/objsur') ;
-			say STDERR "FirstEntryRef", rtheader($FirstEntryRef);
+			say STDERR "FirstEntryRef", rtheader($FirstEntryRef) if $debug;
 			($FirstEntryComponentLexemes) = $rthash{$FirstEntryRef->getAttribute('guid')}->findnodes('./ComponentLexemes');
-			say STDERR "FirstEntryComponentLexemes", $FirstEntryComponentLexemes;
-			say STDERR "FECL as node:", ref($FirstEntryComponentLexemes);
+			say STDERR "FirstEntryComponentLexemes", $FirstEntryComponentLexemes if $debug;
+			say STDERR "FECL as node:", ref($FirstEntryComponentLexemes) if $debug;
 			}
 		else {
 			my $senseguid = 0;
-			say  STDERR "Looking for Sense $Abbrev in ", $targ;
+			say  STDERR "Looking for Sense $Abbrev in ", $targ if $debug;
 			if ($Abbrev =~ /\Q$SenseXRefPrefix\E/) {
 				# for sense references, find the proper sense #
 				my $mainentry = $rthash{$targ->getAttribute('guid')};
 				my @senserefs = $mainentry->findnodes('./Senses/objsur');
 				my $sensemax = @senserefs;
-				say  STDERR "found $sensemax senses.";
+				say  STDERR "found $sensemax senses." if $debug;
 				my $senseno = $Abbrev;
 				$senseno =~ s/\Q$SenseXRefPrefix\E//;
-				say  STDERR "Looking for Sense # $senseno";
+				say  STDERR "Looking for Sense # $senseno" if $debug;
 				if ($senseno > $sensemax)  {
 					say  STDERR "Sense # $senseno doesn't exist (too large).";
 					say  STDERR displaylexentstring ($rthash{$targ->getAttribute('guid')});
@@ -139,23 +139,23 @@ foreach my $memb (@members) {
 					}
 				else {
 					$senseno = $senseno - 1; # offset 0
-					say STDERR "sense reference", $senserefs[$senseno];
+					say STDERR "sense reference", $senserefs[$senseno] if $debug;
 					$senseguid = $senserefs[$senseno]->getAttribute('guid');
 					}
 				}
 			else {say STDERR "\"$Abbrev\" didn't match Subentry marker"}
 			my $targstring = $targ->toString;
-			say STDERR "subsequent target-rt:", rtheader($targrt) ;
+			say STDERR "subsequent target-rt:", rtheader($targrt)  if $debug;
 			my ($newnode) = XML::LibXML->load_xml(string => $targstring)->findnodes('//*');
 			$newnode->setAttribute('guid', $senseguid) if $senseguid;
-			say STDERR "subsequent target as node:",  $newnode;
-			say STDERR "newnode ref:", ref($newnode);
+			say STDERR "subsequent target as node:",  $newnode if $debug;
+			say STDERR "newnode ref:", ref($newnode) if $debug;
 			$FirstEntryComponentLexemes->addChild($newnode);
-			say STDERR "FirstEntryComponentLexemes after addition", $FirstEntryComponentLexemes;
+			say STDERR "FirstEntryComponentLexemes after addition", $FirstEntryComponentLexemes if $debug;
 			}
 		}
 	}
-say  STDERR "Exiting  Xref2Var ", rtheader($xrefrt);
+say  STDERR "Exiting  Xref2Var ", rtheader($xrefrt) if $debug;
 }
 
 sub rtheader { # dump the <rt> part of the record
