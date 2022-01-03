@@ -3,24 +3,29 @@ FLEx (as of version 9.1) has a bug in the import process when a complex form/sub
 
 ### How these scripts work
 
-There are two main perl scripts used in this process **mn2xref.pl**, and **Xref2Var.pl**. The first, **mn2xref.pl**, modifies the SFM file to prepare it for import into FLEx. The second modifies FLEx project after
+There are two main Perl scripts used in this process **mn2xref.pl**, and **Xref2Var.pl**. The first, **mn2xref.pl**, modifies the SFM file to prepare it for import into FLEx. The second modifies the FLEx project after the SFM file has been imported.
 
-The **mn2xref.pl** script modifies the SFM file to change the 2nd ... nth component references to  special cross-references. The  **Xref2Var.pl** script that modifies the FLEx project uses a cross-refence marker that encodes information about the component it refers to.
+The **mn2xref.pl** script modifies the SFM file to change the 2nd ... nth component references to  special cross-references. The  **Xref2Var.pl** script that modifies the FLEx project. It changes the special cross-refence into variants with special characteristics.
 
-### Two Problems
+The variants that are created in the FLEx project by **Xref2Var.pl** can be changed to complex forms by running the **Var2Compform** script of the **Subentry Promotion** repo.
+
+### Two problems addressed by these scripts
 
 1) When complex forms  are created manually within FLEx (i.e. not imported), it creates an ordered list of the components within the record of the Complex form entry. Cross-references are not stored in order.  The **mn2xref.pl** script that creates the cross-references includes a component number within the cross-reference type name. After the SFM file is imported, the **Xref2Var.pl**  script that converts the cross-references to variant links processes the cross-references in order so that the newly created variant links are in order.
-2) When FLEx imports an SFM file into a project that already has entries, it doesn't keep track of sense numbers of entries that already exist in the project. This means that when a new SFM record has a reference to a sense of a pre-existing entry, it doesn't handle it properly. The **mn2xref.pl** script handle this problem by including the sense number in the cross reference. The  **Xref2Var.pl**  script finds the proper sense based on that number when it changes the variant reference to point to the proper sense.
+2) Another bug occurs when FLEx imports an SFM file into a project that already has entries. It doesn't keep track of sense numbers of entries that already exist in the project. This means that when a new SFM record has a reference to one of the senses of a pre-existing entry, it doesn't handle it properly. The **mn2xref.pl** script handle this problem by including the sense number in the cross reference. The  **Xref2Var.pl**  script finds the proper sense based on that number. The variant reference that it creates will to point to the proper sense.
 
 ### Preparing the SFM file
 
+* *This section needs more detail.*
+
 * Include complex form marker in the records when you create them.
+
 * The component references should not be under a sense. I.e., they should appear before any \\ps,  \\sn,  \\ge or  \\de markers
 
-* perl script (mn2xref.pl) to:
+* run perl script **mn2xref.pl** to:
   * change 2nd & subsequent \mn fields to either *\lf EntryComponent-<component#>\lv target* or r *\lf SenseComponent-<sense#>-<component#>\lv target*  pairs.
 
-    * e.g. from the Nkonya Language of Ghana (English is  parentheses)
+    * e.g. from the Nkonya Language of Ghana (English is in  parentheses)
 
     * ````SFM (MDF)
       \lx atowuhɛ (something dead)
@@ -31,7 +36,7 @@ The **mn2xref.pl** script modifies the SFM file to change the 2nd ... nth compon
       
       \lx monihɛ (large)
       \mn moni (grow large)
-      \mn -hɛ (Adjectivizetr)
+      \mn -hɛ (Adjectivizer)
       ````
       becomes:
 
