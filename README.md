@@ -62,11 +62,11 @@ The variants that are created in the FLEx project by **Xref2Var.pl** can be chan
   * If a cross-reference is to a sense, it finds the sense and makes the component a sense reference
 
 
-
-
 ## Notes
 
 The Abbreviation shouldn't appear elsewhere in the LexRefTypes
+
+The script **mn2xref.pl** currently just flags complex form SFM records with no \spec field. Perhaps it should supply the \_UNSPECIFIED\_ marker. Probably sufficient to just set it as a variable, but you could read it from the **PromoteSubentries.ini** file if you want to get fancy.
 
 SFM import needs dummy prefix/suffixes -- maybe not
 
