@@ -3,7 +3,7 @@ FLEx (as of version 9.1) has a bug in the import process when a complex form/sub
 
 ### How these scripts work
 
-There are two main Perl scripts used in this process **mn2xref.pl**, and **Xref2Var.pl**. The first, **mn2xref.pl**, modifies the SFM file to prepare it for import into FLEx. The second modifies the FLEx project after the SFM file has been imported.
+There are two main Perl scripts used in this process **mn2xref.pl**, and **Xref2Var.pl**. The first, **mn2xref.pl**, modifies the SFM file to prepare it for import into FLEx. The second, **Xref2Var.pl**, modifies the FLEx project after the SFM file has been imported.
 
 The **mn2xref.pl** script modifies the SFM file to change the 2nd ... nth component references to  special cross-references. The  **Xref2Var.pl** script that modifies the FLEx project. It changes the special cross-refence into variants with special characteristics.
 
@@ -31,7 +31,7 @@ The variants that are created in the FLEx project by **Xref2Var.pl** can be chan
       \lx atowuhɛ (something dead)
       ...
       \mn atɔ (something)
-      \mn wu 1 (dead)
+      \mn wu 1 (die)
       \mn -hɛ (Adjectivizer)
       
       \lx monihɛ (large)
@@ -51,7 +51,7 @@ The variants that are created in the FLEx project by **Xref2Var.pl** can be chan
       
       \lx monihɛ
       \mn moni
-      \lf EntryComponent-2 ( moni is 2nd component)
+      \lf EntryComponent-2 ( -hɛ is 2nd component)
       \lv -hɛ
       ````
 
