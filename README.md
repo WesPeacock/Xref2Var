@@ -44,14 +44,14 @@ The variants that are created in the FLEx project by **Xref2Var.pl** can be chan
       \lx atowuhɛ
       ...
       \mn atɔ
-      \lf SenseComponent-1-2 (sense #1 of atɔ is the 2nd component)
-      \lv wu 5
-      \lf EntryComponent-3 ( -hɛ is 3rd component)
+      \lf SenseComponent-1-2 (sense #1 of wu is the 2nd component of atowuhɛ)
+      \lv wu
+      \lf EntryComponent-3 ( -hɛ is 3rd component of atowuhɛ)
       \lv -hɛ
       
       \lx monihɛ
       \mn moni
-      \lf EntryComponent-2 ( -hɛ is 2nd component)
+      \lf EntryComponent-2 ( -hɛ is 2nd component of monihɛ)
       \lv -hɛ
       ````
 
