@@ -124,3 +124,9 @@ Manual cleanup of the FLEx database afterwards:
 
 * merge the dummy prefix/suffixes with the pre-existing real ones -- maybe not
 * delete the special cross-refs
+
+#### About this Document
+
+This document is written in Markdown format. It's hosted on *github.com*. The github site that it's hosted on will display it in a formatted version.
+
+If you're looking at it another way and you're seeing unformatted text, there are good Markdown editors available for a Windows and Linux. An free on-line editor is available at https://stackedit.io/
