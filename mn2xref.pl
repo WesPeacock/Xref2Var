@@ -82,11 +82,11 @@ push @opledfile_in, $line;
 for my $oplline (@opledfile_in) {
 	my $mncount = 0;
 	if ($oplline =~ m/\\(ps|sn|ge|de) .+?\\$MainRefMarker /) {
-		say STDERR "Component reference within a sense";
+		say STDERR "Info:Component reference within a sense";
 		say STDERR $oplline;
 		}
 	if (($oplline =~ m/\\$MainRefMarker /) && !($oplline =~ m/\\spec /)) {
-		say STDERR "Component reference without a ComplexFormType marker";
+		say STDERR "Error:Component reference without a ComplexFormType marker";
 		say STDERR $oplline;
 		}
 	$oplline =~ s/(\\$MainRefMarker [^#]*)/$mncount++; mnxrefreplace($mncount,$1)/ge;
