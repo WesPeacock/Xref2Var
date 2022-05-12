@@ -1,4 +1,4 @@
-# Cross-reference to Variant
+# Cross-reference to Variant (Xref2Var)
 FLEx (as of version 9.1) has a bug in the import process when a complex form/subentry is imported. The first main entry (component) reference is handled &ndash; see the Var2Compform portion of the Subentry Promotion for details. However, the 2nd, 3rd, ... nth references are ignored and those links are lost. The scripts included here provide a way to provide references to multiple main entries.
 
 ### How these scripts work
@@ -61,8 +61,58 @@ The variants that are created in the FLEx project by **Xref2Var.pl** can be chan
   * Adds them to the first (variant) entry
   * If a cross-reference is to a sense, it finds the sense and makes the component a sense reference
 
+.
+
+### Steps to this Process
+
+There are seven steps (XRC1-7) to this process:
+
+- XRC1. Modify the FLEx database to have fancy unidirectional Complex to Component crossref type.
+
+- XRC2. Add components to complex entries. If the entry is a sub-entry to be promoted don't add the main entry that it is under. The sub-entry promotion process will set that field.
+- XRC3. After the **runse2lx.sh**, insert \spec fields for records that have \mn fields without \spec markers. This can be as simple as:
+
+   ```bash
+   perl -pf opl.pl in.sfm |
+   perl -pE 's/(\\mn[^#]*#)/$1\\spec _UNSPECIFIED_#/ if (! /\\spec /)' |\
+   perl -pf de_opl.pl >out.sfm
+   ```
+
+- XRC4. Run **mn2xref.pl** to change 2nd & subsequent \mn marks to fancy \lf markers.
+- XRC5. Import the SFM file.
+- XRC6. Run the **Xrf2Var.pl** to change the crossrefs to variants.
+- XRC7. Delete Complex/Component crossref type from the database.
+
+### How this Process Fits in with the PromoteSubentry Process
+
+There are 6 steps (PS1-6) of the PromoteSubentry Process. The above steps have been interspersed:
+
+- XRC1. Modify the FLEx database to have a unidirectional Complex to Component crossref types.
+
+- PS1. Import  *ModelEntries-MDFroot.db*  into Initial FLEx database to set up Model Subentries.
+
+- XRC2. Add components to complex entries. See note above.
+
+- PS2. Run **runse2lx.sh** subentry extraction and promotion.
+
+- XRC3. Ensure all the component entries are flagged with a component type.
+
+- XRC4. Modify the import mapping so that *mnx* markers are mapped to the new crossref type.
+
+- PS3/XRC5. Import SFM file with Subentries.
+
+- PS4. Run **runVar2Compform.sh** to make the subentries into complex forms
+
+- PS5. Delete the  *"SubEntry Type Flag"* & Model Entries.
+
+- XRC6. Run the **Xrf2Cmpnt.pl** to add the crossrefs as components.
+
+- XRC7. Delete Complex/Component crossref types from the database.
+
+- PS6. Delete the Model Complex form template entries
 
 ## Notes
+
 
 The Abbreviation shouldn't appear elsewhere in the LexRefTypes
 
