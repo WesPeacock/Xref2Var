@@ -72,7 +72,7 @@ There are seven steps (XRC1-7) to this process:
 - XRC3. After the **runse2lx.sh**, insert \spec fields for records that have \mn fields without \spec markers. This can be as simple as:
 
    ```bash
-   perl -pf opl.pl in.sfm |
+   perl -pf opl.pl in.sfm |\
    perl -pE 's/(\\mn[^#]*#)/$1\\spec _UNSPECIFIED_#/ if (! /\\spec /)' |\
    perl -pf de_opl.pl >out.sfm
    ```
