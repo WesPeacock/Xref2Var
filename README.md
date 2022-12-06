@@ -5,7 +5,7 @@ FLEx (as of version 9.1) has a bug in the import process when a complex form/sub
 
 There are two main Perl scripts used in this process **mn2xref.pl**, and **Xref2Var.pl**. The first, **mn2xref.pl**, modifies the SFM file to prepare it for import into FLEx. The second, **Xref2Var.pl**, modifies the FLEx project after the SFM file has been imported.
 
-The **mn2xref.pl** script modifies the SFM file to change the 2nd ... nth component references to  special cross-references. The  **Xref2Var.pl** script that modifies the FLEx project. It changes the special cross-refence into variants with special characteristics.
+The **mn2xref.pl** script modifies the SFM file to change the 2nd ... nth component references to  special cross-references. The  **Xref2Var.pl** script modifies the FLEx project. It changes the special cross-refence into variants with special characteristics.
 
 The variants that are created in the FLEx project by **Xref2Var.pl** can be changed to complex forms by running the **Var2Compform** script of the **Subentry Promotion** repo.
 
@@ -61,7 +61,6 @@ The variants that are created in the FLEx project by **Xref2Var.pl** can be chan
   * Adds them to the first (variant) entry
   * If a cross-reference is to a sense, it finds the sense and makes the component a sense reference
 
-.
 
 ### Steps to this Process
 
