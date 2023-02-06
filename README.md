@@ -77,7 +77,11 @@ There are seven steps (XRC1-7) to this process:
    perl -pf de_opl.pl >out.sfm
    ```
 
-- XRC4. Run **mn2xref.pl** to change 2nd & subsequent \mn marks to fancy \lf markers.
+- XRC4. Run **mn2xref.pl** to change 2nd & subsequent \mn marks to fancy \lf markers. Recheck the \lf markers against the list of lexical references created in XRC1. Adjust the FLEx project if necessary. The following one-liner creates a list that you can check against the FLEx lexical relations list:
+
+   ```bash
+   grep '\\lf ' database.sfm |sort |uniq -c
+   ```
 - XRC5. Import the SFM file.
 - XRC6. Run the **Xrf2Var.pl** to change the crossrefs to variants.
 - XRC7. Delete Complex/Component crossref type from the database.
@@ -86,29 +90,29 @@ There are seven steps (XRC1-7) to this process:
 
 There are 6 steps (PS1-6) of the PromoteSubentry Process. The above steps have been interspersed:
 
-- XRC1. Modify the FLEx database to have a unidirectional Complex to Component crossref types.
+1. XRC1. Modify the FLEx database to have a unidirectional Complex to Component crossref types.
 
-- PS1. Import  *ModelEntries-MDFroot.db*  into Initial FLEx database to set up Model Subentries.
+2. PS1. Import  *ModelEntries-MDFroot.db*  into Initial FLEx database to set up Model Subentries.
 
-- XRC2. Add components to complex entries. See note above.
+3. XRC2. Add components to complex entries. See note above.
 
-- PS2. Run **runse2lx.sh** subentry extraction and promotion.
+4. PS2. Run **runse2lx.sh** subentry extraction and promotion.
 
-- XRC3. Ensure all the component entries are flagged with a component type.
+5. XRC3. Ensure all the component entries are flagged with a component type.
 
-- XRC4. Modify the import mapping so that *mnx* markers are mapped to the new crossref type.
+6. XRC4. Run **mn2xref.pl** and check the lexical references in the SFM file against the list in the FLEx database.
 
-- PS3/XRC5. Import SFM file with Subentries.
+7. PS3/XRC5. Import SFM file with Subentries. Modify the import mapping so that *mnx* markers are mapped to the new crossref type.
 
-- PS4. Run **runVar2Compform.sh** to make the subentries into complex forms
+8. PS4. Run **runVar2Compform.sh** to make the subentries into complex forms
 
-- PS5. Delete the  *"SubEntry Type Flag"* & Model Entries.
+9. PS5. Delete the  *"SubEntry Type Flag"* & Model Entries.
 
-- XRC6. Run the **Xrf2Cmpnt.pl** to add the crossrefs as components.
+10. XRC6. Run the **Xrf2Cmpnt.pl** to add the crossrefs as components.
 
-- XRC7. Delete Complex/Component crossref types from the database.
+11. XRC7. Delete Complex/Component crossref types from the database.
 
-- PS6. Delete the Model Complex form template entries
+12. PS6. Delete the Model Complex form template entries
 
 ## Notes
 
